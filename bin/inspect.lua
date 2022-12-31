@@ -33,3 +33,5 @@ for t, v in pairs(block.tags) do
     a = a + 1
 end
 print("name: "..block.name)
+--for k, v in pairs(block) do print(k) end
+--print(textutils.serialize(block.state))
