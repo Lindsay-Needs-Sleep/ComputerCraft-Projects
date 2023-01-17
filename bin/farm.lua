@@ -39,16 +39,21 @@ inventory.setAutoRefill(true)
 local plantingSlot = 1 -- slot 1 should stay full
 turtle.select(plantingSlot)
 
-path.rectangleSimple(dimensionVector, function (direction)
-  if turtle.getSelectedSlot() ~= plantingSlot then turtle.select(plantingSlot) end
-  if turtle.getItemCount() == 0 then error("Ran out of items to place") end
-  bore.fuelAndInventoryCheck(startPos, startHeading)
-  local found, block = turtle.inspectDown()
-  if not found or blocks.isSimpleCrop(block) and blocks.isHarvestable(block) then
-    turtle.digDown() -- till or harvest
-  end
-  turtle.placeDown() -- attempt planting
+local success, error = pcall(function()
+  path.rectangleSimple(dimensionVector, function (direction)
+
+    if turtle.getSelectedSlot() ~= plantingSlot then turtle.select(plantingSlot) end
+    if turtle.getItemCount() == 0 then error("Ran out of items to place") end
+    bore.fuelAndInventoryCheck(startPos, startHeading)
+    local found, block = turtle.inspectDown()
+    if not found or blocks.isSimpleCrop(block) and blocks.isHarvestable(block) then
+      turtle.digDown() -- till or harvest
+    end
+    turtle.placeDown() -- attempt planting
+
+  end)
 end)
+if error then print(error) end
 
 move.goTo(startPos)
 move.turnTo(startHeading)
