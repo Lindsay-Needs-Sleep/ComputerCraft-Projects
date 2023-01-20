@@ -3,6 +3,47 @@ local move = require("/lib/move")
 
 local m = {}
 
+-- Runs the turtle along a diagonal line.
+-- Calls do something once per longest dimension.
+m.horizontalDiagLine = function(xChange, zChange, doSomething)
+  local length --longer dimension
+  local xSign = xChange / math.abs(xChange)
+  local zSign = zChange / math.abs(zChange)
+  local slope
+
+  -- We want to run along the longer dimension for speed optimization
+  if math.abs(xChange) >= math.abs(zChange) then
+    length = math.abs(xChange)
+    slope = math.abs(zChange / xChange)
+    nextPos = function (l)
+      return vector.new(l * xSign, 0, math.floor(l * slope) * zSign)
+    end
+  else
+    length = math.abs(zChange)
+    slope = math.abs(xChange / zChange)
+    nextPos = function (l)
+      return vector.new(math.floor(l * slope) * xSign, 0, l * zSign)
+    end
+  end
+
+  doSomething()
+
+  local headingOrder = function ()
+    local heading = location.getHeading()
+    if heading.x == 0 then
+      return "zxy"
+    else
+      return "xzy"
+    end
+  end
+
+  for l = 1, length - 1, 1 do
+    move.digTo(nextPos(l), headingOrder())
+    doSomething()
+  end
+
+end
+
 -- Zigzags through every block in the layer formed by xChange and zChange
 -- preMoveFunc: Called before each move, if it returns false the layer cut terminates
 -- The preMoveFunc(direction) must dig the block in "direction if it exists,
