@@ -49,15 +49,20 @@ local startHeading = location.getHeading()
 local slot = 1
 turtle.select(slot)
 
-path.rectangleSimple(dimensionVector, function (direction)
-  while turtle.getItemCount() == 0 and slot < 16 do
-    slot = slot + 1
-    turtle.select(slot)
-  end
-  if turtle.getItemCount() == 0 then error("Ran out of items to place") end
-  turtle["place"..placeDir]()
-  return true
+local success, error = pcall(function()
+  path.rectangleSimple(dimensionVector, function (direction)
+
+    while turtle.getItemCount() == 0 and slot < 16 do
+      slot = slot + 1
+      turtle.select(slot)
+    end
+    if turtle.getItemCount() == 0 then error("Ran out of items to place") end
+    turtle["place"..placeDir]()
+    return true
+
+  end)
 end)
+if error then print(error) end
 
 startPos.y = location.getPos().y
 move.goTo(startPos)
