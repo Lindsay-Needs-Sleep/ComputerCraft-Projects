@@ -10,13 +10,14 @@ if not _G.location then
   }
 
   -- save old turtle functions
-  local _turtle = {}
-  _turtle.forward = turtle.forward
-  _turtle.up = turtle.up
-  _turtle.down = turtle.down
-  _turtle.back = turtle.back
-  _turtle.turnLeft = turtle.turnLeft
-  _turtle.turnRight = turtle.turnRight
+  _G._turtle = _G._turtle or {}
+  _G._turtle.forward = _G._turtle.forward or turtle.forward
+  _G._turtle.up = _G._turtle.up or turtle.up
+  _G._turtle.down = _G._turtle.down or turtle.down
+  _G._turtle.back = _G._turtle.back or turtle.back
+  _G._turtle.turnLeft = _G._turtle.turnLeft or turtle.turnLeft
+  _G._turtle.turnRight = _G._turtle.turnRight or turtle.turnRight
+  local _turtle = _G._turtle
 
   -- new forward function
   local function forward()
