@@ -45,19 +45,19 @@ m.horizontalDiagLine = function(xChange, zChange, doSomething)
 end
 
 -- Zigzags through every block in the layer formed by xChange and zChange
--- preMoveFunc: Called before each move, if it returns false the layer cut terminates
--- The preMoveFunc(direction) must dig the block in "direction if it exists,
+-- preMoveFunc(direction): Called before each move, must dig the block in "direction if it exists,
 -- otherwise the turtle won't be able to move and the program will terminate.
 -- direction can be "" for forward, "Up" for up, or "Down"
 -- Feel free to do whatever else with the turtle in preMove (inspect below/above), but it should be returned to the pos+orientation before returning true
 -- Turtle will finish in a non-starting corner
-m.horizontalLayer = function(xChange, zChange, preMoveFunc)
+m.horizontalLayer = function(xChange, zChange, preMoveFunc, runAlongZ)
   local length --longer dimension
   local width --shorter dimention
   local turnOffset -- keeps track of if we should turn right or left
 
   -- We want to run along the longer dimension for speed optimization
-  if math.abs(xChange) >= math.abs(zChange) then
+  -- (unless runAlongZ override)
+  if math.abs(xChange) >= math.abs(zChange) and not runAlongZ then
     turnOffset = 0
     length = math.abs(xChange)
     width = math.abs(zChange)
